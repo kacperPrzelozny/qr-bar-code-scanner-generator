@@ -56,21 +56,17 @@ public class BargeneratorFragment extends Fragment {
             public void onClick(View view) {
                 String textToGenerate = input.getText().toString();
                 Code128Writer writer = new Code128Writer();
-                try {
-                    BitMatrix bitMatrix = writer.encode(textToGenerate, BarcodeFormat.CODE_128, 1024, 768);
-                    int width = bitMatrix.getWidth();
-                    int height = bitMatrix.getHeight();
-                    Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
-                    for (int x = 0; x < width; x++) {
-                        for (int y = 0; y < height; y++) {
-                            bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
-                        }
+                BitMatrix bitMatrix = writer.encode(textToGenerate, BarcodeFormat.CODE_128, 1024, 768);
+                int width = bitMatrix.getWidth();
+                int height = bitMatrix.getHeight();
+                Bitmap bmp = Bitmap.createBitmap(width, height, Bitmap.Config.RGB_565);
+                for (int x = 0; x < width; x++) {
+                    for (int y = 0; y < height; y++) {
+                        bmp.setPixel(x, y, bitMatrix.get(x, y) ? Color.BLACK : Color.WHITE);
                     }
-                    qr.setImageBitmap(bmp);
-
-                } catch (WriterException e) {
-                    e.printStackTrace();
                 }
+                qr.setImageBitmap(bmp);
+
             }
         });
 
