@@ -1,5 +1,8 @@
 package com.kacperprzelozny.qrcode.ui.scanner;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.activity.result.ActivityResultLauncher;
@@ -11,11 +14,14 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.journeyapps.barcodescanner.CaptureActivity;
 import com.journeyapps.barcodescanner.ScanContract;
 import com.journeyapps.barcodescanner.ScanOptions;
 import com.kacperprzelozny.qrcode.R;
+
+import java.util.Objects;
 
 public class ScannerFragment extends Fragment {
 
@@ -43,6 +49,11 @@ public class ScannerFragment extends Fragment {
         resultView = (TextView) view.findViewById(R.id.scan_result);
         copy = (ImageView) view.findViewById(R.id.copy_button);
 
+        copy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) { copyToClipboard(); }
+        });
+
         scannerButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -61,6 +72,17 @@ public class ScannerFragment extends Fragment {
         options.setOrientationLocked(true);
         options.setCaptureActivity(CaptureAct.class);
         barLauncher.launch(options);
+    }
+
+    private void copyToClipboard(){
+        ClipboardManager clipboard = (ClipboardManager) requireContext().getSystemService(Context.CLIPBOARD_SERVICE);
+        ClipData clip = ClipData.newPlainText("Copied Text", resultText);
+        clipboard.setPrimaryClip(clip);
+
+        Toast toast = Toast.makeText(getContext(),"Copied to clipboard",Toast.LENGTH_SHORT);
+        toast.setMargin(50,50);
+        toast.show();
+
     }
 
     ActivityResultLauncher<ScanOptions> barLauncher = registerForActivityResult(new ScanContract(), result->

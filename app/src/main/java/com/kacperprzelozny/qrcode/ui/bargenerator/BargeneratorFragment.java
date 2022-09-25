@@ -50,7 +50,6 @@ public class BargeneratorFragment extends Fragment {
         input = (EditText) view.findViewById(R.id.to_generate_bar);
         qr = (ImageView) view.findViewById(R.id.generated_bar);
 
-
         generateButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
